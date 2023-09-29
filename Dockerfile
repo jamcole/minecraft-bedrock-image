@@ -43,9 +43,7 @@ RUN \
   ln -s /srv/data/valid_known_packs.json . && \
   ln -s /srv/data/worlds .
 
-COPY --chown=root:root server.properties.add bedrock_server.sh .
-
-RUN ls -lah .
+COPY server.properties.add bedrock_server.sh .
 
 USER nonroot
 
