@@ -1,3 +1,5 @@
 # Additional server.properties settings that aren't in the default server.properties file
 emit-server-telemetry=false
+# Level type "DEFAULT","FLAT","LEGACY"
+level-type=DEFAULT
 
