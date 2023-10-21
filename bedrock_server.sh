@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ $# -eq 1  ] &&[ $1 = 'version' ]; then
+  cat bedrock-version.txt
+  exit
+fi
+
 set -e
 
 echo "Updating base files in storage..."

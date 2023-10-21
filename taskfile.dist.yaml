@@ -1,0 +1,59 @@
+version: '3'
+
+vars:
+  IMAGE_BUILDER_CMD: podman
+  IMAGE_NAME: ghcr.io/jamcole/minecraft-bedrock-image
+
+tasks:
+  default:
+    cmds:
+    - task: build
+  url-get:
+    run: once
+    generates:
+    - src/resources/bedrock-url.txt
+    status:
+    - test -f src/resources/bedrock-url.txt
+    cmds:
+    - curl -s -L -A Edge/10000 "https://www.minecraft.net/en-us/download/server/bedrock" | grep -i 'href=' | grep -i linux | grep -Eo 'https?:[^\"]+.zip' | grep -vi preview | head -n 1 > src/resources/bedrock-url.txt
+  version-get:
+    run: once
+    sources:
+    - src/resources/bedrock-url.txt
+    generates:
+    - src/resources/bedrock-version.txt
+    status:
+    - test -f src/resources/bedrock-version.txt
+    cmds:
+    - grep -Eo '([0-9\.]*[0-9]+)+' src/resources/bedrock-url.txt > src/resources/bedrock-version.txt
+    deps:
+    - url-get
+  build:
+    run: always
+    envs:
+      DOCKER_BUILDKIT: 1
+    cmds:
+    - sh -c '{{.IMAGE_BUILDER_CMD}} build --progress plain --tag {{.IMAGE_NAME}}:v$(cat src/resources/bedrock-version.txt) .'
+    requires:
+      vars: [IMAGE_BUILDER_CMD, IMAGE_NAME]
+    deps:
+    - version-get
+  git-tag:
+    run: always
+    cmds:
+    - git add src/resources/bedrock-version.txt
+    - git commit -m "version tag" --only src/resources/bedrock-version.txt || true
+    - git tag v$(cat src/resources/bedrock-version.txt)
+    - git push origin v$(cat src/resources/bedrock-version.txt)
+    deps:
+    - version-get
+  clean:
+    status:
+    - false
+    cmds:
+    - for: sources
+      cmd: '[ -f "{{ .ITEM }}" ] && rm "{{ .ITEM }}"'
+    sources:
+    - src/resources/bedrock-url.txt
+    - src/resources/bedrock-version.txt
+

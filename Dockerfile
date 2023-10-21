@@ -1,39 +1,27 @@
+# syntax=docker/dockerfile:1.4
 FROM cgr.dev/chainguard/wolfi-base:latest AS builder
 
 RUN apk add curl
 
-RUN mkdir -p /root/download/bedrock /root/download/mc-monitor
+RUN mkdir -p /tmp/download/bedrock /tmp/download/mc-monitor
 
-WORKDIR /root/download
+WORKDIR /tmp/download
 
-# We can't use the authorative url to check for new versions because they block non-browser User-Agents
-# This service always seems to return the current version download url
-ADD --chmod=644 https://mc-bds-helper.vercel.app/api/latest bedrock-version.txt
+COPY src/resources/bedrock-url.txt bedrock/
+RUN cat bedrock/bedrock-url.txt | xargs -n 1 curl -L --no-clobber -o bedrock.zip && \
+  unzip -d bedrock bedrock.zip
 
-# We don't need to user the the prior url - but it's an effective cache-buster
-#RUN curl -s -L -A 'Edge/10000' 'https://www.minecraft.net/en-us/download/server/bedrock' |\
-#  grep -i 'href=' | grep -i linux | grep -Eo 'https?:[^\"]+.zip' | grep -vi preview | head -n 1 | xargs -n 1 curl -L --no-clobber -o bedrock.zip
-
-RUN cat bedrock-version.txt | head -n 1 | xargs -n 1 curl -L --no-clobber -o bedrock.zip
-
-RUN unzip -d bedrock bedrock.zip
-
-#ADD --chmod=644 https://api.github.com/repos/itzg/mc-monitor/releases/latest mc-monitor-version.json
-
-#RUN cat mc-monitor-version.json | grep -Eo 'https://[^"]+_linux_amd64.tar.gz' | head -n 1 | xargs -n 1 curl -L --no-clobber -o mc-monitor.tar.gz
-
-ADD https://github.com/itzg/mc-monitor/releases/download/0.12.2/mc-monitor_0.12.2_linux_amd64.tar.gz mc-monitor.tar.gz
-
-RUN tar -xzvf mc-monitor.tar.gz -C mc-monitor
+RUN curl -s -L "https://api.github.com/repos/itzg/mc-monitor/releases/latest" | grep -Eo 'https://[^"]+_linux_amd64.tar.gz' | head -n 1 > mc-monitor/mc-monitor-url.txt && \
+  cat mc-monitor/mc-monitor-url.txt | xargs -n 1 curl -L --no-clobber -o mc-monitor.tar.gz && \
+  tar -xzvf mc-monitor.tar.gz -C mc-monitor
 
 FROM cgr.dev/chainguard/wolfi-base:latest AS runner
 
-RUN \
-  apk add libstdc++ curl
+RUN apk add libstdc++ curl
 
-COPY --from=builder --chown=root:root /root/download/mc-monitor/mc-monitor /usr/local/bin/
+COPY --from=builder /tmp/download/mc-monitor/mc-monitor /usr/local/bin/
 
-COPY --from=builder --chown=root:root /root/download/bedrock/ /srv/app/
+COPY --from=builder /tmp/download/bedrock/ /srv/app/
 
 WORKDIR /srv/app
 
