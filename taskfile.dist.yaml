@@ -41,12 +41,15 @@ tasks:
   git-tag:
     run: always
     cmds:
-    - git add src/resources/bedrock-version.txt
-    - git commit -m "version tag" --only src/resources/bedrock-version.txt || true
-    - git tag v$(cat src/resources/bedrock-version.txt)
-    - git push origin v$(cat src/resources/bedrock-version.txt)
+    - git pull --tags -f
+    - git add src/resources
+    - git commit -m "version update" --only src/resources && bash -c 'git show-ref --tags {{.TAG}} --quiet && git tag {{.TAG}}-$(date +%s) || git tag {{.TAG}}' || true
+    - git push origin --tags
     deps:
     - version-get
+    vars:
+      TAG:
+        sh: 'echo v$(cat src/resources/bedrock-version.txt)'
   clean:
     status:
     - false
