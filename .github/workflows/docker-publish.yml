@@ -18,8 +18,6 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  GIT_COMMITTER_NAME: github-actions[bot]
-  GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
 
 jobs:
   build:
@@ -48,6 +46,9 @@ jobs:
       - name: Run git-tag Task
         run: task clean git-tag
         if: github.event_name != 'pull_request'
+        env:
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
