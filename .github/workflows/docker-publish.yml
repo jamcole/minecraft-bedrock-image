@@ -45,8 +45,7 @@ jobs:
 
       - name: Run git-tag Task
         run: task clean git-tag
-        with:
-          push: ${{ github.event_name != 'pull_request' }}
+        if: github.event_name != 'pull_request'
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
