@@ -1,0 +1,1 @@
+https://github.com/itzg/mc-monitor/releases/download/0.12.4/mc-monitor_0.12.4_linux_amd64.tar.gz

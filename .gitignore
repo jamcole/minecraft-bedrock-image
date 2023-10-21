@@ -6,6 +6,5 @@ valid_known_packs.json
 resource_packs
 config
 behavior_packs
-src/resources/*-url.txt
 .task
 
