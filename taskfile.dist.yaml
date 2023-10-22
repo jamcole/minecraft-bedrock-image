@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  IMAGE_BUILDER_CMD: podman
+  IMAGE_BUILDER_CMD: docker
   IMAGE_NAME: ghcr.io/jamcole/minecraft-bedrock-image
 
 tasks:

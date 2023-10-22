@@ -7,4 +7,5 @@ resource_packs
 config
 behavior_packs
 .task
+taskfile.yaml
 

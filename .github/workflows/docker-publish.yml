@@ -1,4 +1,4 @@
-name: Docker
+name: Publish Image
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -6,16 +6,9 @@ name: Docker
 # documentation.
 
 on:
-  schedule:
-    - cron: '38 1 * * *'
   push:
-    branches:
-    - 'main'
     tags:
     - 'v*'
-#  pull_request:
-#    branches:
-#    - 'main'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -25,10 +18,9 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
@@ -38,24 +30,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ssh-key: "${{ secrets.ACTIONS_SSH_KEY }}"
-
-      - name: Setup Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
-
-      - name: Setup Task
-        uses: arduino/setup-task@v1
-
-      - name: Run git-tag Task
-        run: task clean git-tag
-        if: github.event_name != 'pull_request' && github.ref_type != 'tag'
-        env:
-          GIT_AUTHOR_NAME: github-actions[bot]
-          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-          GIT_COMMITTER_NAME: github-actions[bot]
-          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          ssh-key: "${{ secrets.GITHUB_TOKEN }}"
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
