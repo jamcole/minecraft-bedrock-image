@@ -10,6 +10,8 @@ on:
     - cron: '38 1 * * *'
   push:
     branches: [ "main" ]
+  tags:
+    tags: [ 'v*.*.*.*', 'v*.*.*', 'v*.*', 'v*' ]
   pull_request:
     branches: [ "main" ]
 
@@ -84,9 +86,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{raw}}
             type=sha
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            type=semver,pattern={{raw}}
+            type=raw,value=latest,enable={{is_default_branch}}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action

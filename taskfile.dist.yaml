@@ -42,8 +42,8 @@ tasks:
     run: always
     cmds:
     - git pull --tags -f
-    - git add src/resources
-    - git commit -m "version update" --only src/resources || true
+    - git add .
+    - git commit -m "version update" || true
     - git show-ref --tags v$(cat src/resources/bedrock-version.txt) --quiet && git tag v$(cat src/resources/bedrock-version.txt)-$(date +%s) || git tag v$(cat src/resources/bedrock-version.txt)
     - git push origin --tags
     deps:
