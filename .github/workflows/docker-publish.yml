@@ -9,10 +9,13 @@ on:
   schedule:
     - cron: '38 1 * * *'
   push:
-    branches: [ "main" ]
-    tags: [ 'v*.*.*.*', 'v*.*.*', 'v*.*', 'v*' ]
+    branches:
+    - 'main'
+    tags:
+    - 'v**'
   pull_request:
-    branches: [ "main" ]
+    branches:
+    - 'main'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -86,6 +89,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha
+            type=schedule,pattern=nightly
             type=semver,pattern={{raw}}
             type=raw,value=latest,enable={{is_default_branch}}
 
