@@ -40,8 +40,15 @@ jobs:
         with:
           version: 3.x
       
+      - name: Run clean Task
+        if: github.event_name != 'pull_request'
+        run: task clean
+
+      - name: Run build Task
+        run: task build
+
       - name: Run git-tag Task
-        run: task clean git-tag build
+        run: task git-tag
         if: github.event_name != 'pull_request' && github.ref_type != 'tag'
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
