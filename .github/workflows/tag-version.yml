@@ -39,9 +39,6 @@ jobs:
         uses: arduino/setup-task@v1
         with:
           version: 3.x
-
-      - name: Setup Task
-        uses: arduino/setup-task@v1
       
       - name: Run git-tag Task
         run: task clean git-tag build

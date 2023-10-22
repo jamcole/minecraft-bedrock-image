@@ -43,8 +43,8 @@ tasks:
     cmds:
     - git pull --tags -f
     - git add .
-    - git commit -m "version update" || true
-    - git show-ref --tags v$(cat src/resources/bedrock-version.txt) --quiet && git tag -a -m "duplicate tag" v$(cat src/resources/bedrock-version.txt)-$(date +%s) || git tag -a -m "new tag" v$(cat src/resources/bedrock-version.txt)
+    - git commit -m "version update" && bash -c 'git show-ref --tags v$(cat src/resources/bedrock-version.txt) --quiet && git tag -a -m "update to existing tag" v$(cat src/resources/bedrock-version.txt)-$(date +%s) || git tag -a -m "new tag" v$(cat src/resources/bedrock-version.txt)' || true
+    - git show-ref --tags v$(cat src/resources/bedrock-version.txt) --quiet || git tag -a -m "new tag" v$(cat src/resources/bedrock-version.txt)
     - git push --follow-tags
     deps:
     - version-get
