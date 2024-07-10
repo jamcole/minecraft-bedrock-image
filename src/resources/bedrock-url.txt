@@ -1,1 +1,1 @@
-https://minecraft.azureedge.net/bin-linux/bedrock-server-1.21.1.03.zip
+https://minecraft.azureedge.net/bin-linux/bedrock-server-1.21.2.02.zip
