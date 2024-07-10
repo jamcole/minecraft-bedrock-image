@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.8
 FROM cgr.dev/chainguard/wolfi-base:latest AS builder
 
 RUN apk add curl
@@ -17,7 +17,7 @@ RUN curl -s -L "https://api.github.com/repos/itzg/mc-monitor/releases/latest" | 
 
 FROM cgr.dev/chainguard/wolfi-base:latest AS runner
 
-RUN apk add libstdc++ curl
+RUN apk add libstdc++
 
 COPY --from=builder /tmp/download/mc-monitor/mc-monitor /usr/local/bin/
 
