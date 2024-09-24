@@ -8,8 +8,7 @@ RUN mkdir -p /tmp/download/bedrock /tmp/download/mc-monitor
 WORKDIR /tmp/download
 
 COPY src/resources/bedrock-url.txt bedrock/
-RUN cat bedrock/bedrock-url.txt && \
-  cat bedrock/bedrock-url.txt | xargs -n 1 curl -L --no-clobber -o bedrock.zip && \
+RUN cat bedrock/bedrock-url.txt | xargs -n 1 curl -L --no-clobber -A Edge/10000 -o bedrock.zip && \
   unzip -d bedrock bedrock.zip
 
 RUN curl -s -L "https://api.github.com/repos/itzg/mc-monitor/releases/latest" | grep -Eo 'https://[^"]+_linux_amd64.tar.gz' | head -n 1 > mc-monitor/mc-monitor-url.txt && \
