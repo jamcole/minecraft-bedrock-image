@@ -53,7 +53,7 @@ for i in $(grep -E '^[^#]+=' server.properties); do
   
   if [ $? -eq 0 ]; then
     echo "  *$k=$o ($e)"
-    sed -E -i "s/^$k=.+\$/$k=$o/" "$(readlink server.properties)"
+    sed -E -i "s/^$k=.*\$/$k=$o/" "$(readlink server.properties)"
   else
     echo "  $k=$v ($e)"
     # The initial cp makes it so we don't need to update this
