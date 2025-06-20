@@ -15,7 +15,7 @@ tasks:
     status:
     - test -f src/resources/bedrock-url.txt
     cmds:
-    - curl -s -L -A Edge/10000 "https://www.minecraft.net/en-us/download/server/bedrock" | grep -i 'href=' | grep -i linux | grep -Eo 'https?:[^\"]+.zip' | grep -vi preview | head -n 1 > src/resources/bedrock-url.txt
+    - curl -s -L https://net-secondary.web.minecraft-services.net/api/v1.0/download/links | jq -r '.result.links[] | select(.downloadType == "serverBedrockLinux") | .downloadUrl' > src/resources/bedrock-url.txt
   version-get:
     run: once
     sources:
