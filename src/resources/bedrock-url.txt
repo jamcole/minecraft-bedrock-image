@@ -1,1 +1,1 @@
-https://www.minecraft.net/bedrockdedicatedserver/bin-linux/bedrock-server-1.21.121.1.zip
+https://www.minecraft.net/bedrockdedicatedserver/bin-linux/bedrock-server-1.21.122.2.zip
