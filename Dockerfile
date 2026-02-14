@@ -17,7 +17,7 @@ RUN curl -s -L "https://api.github.com/repos/itzg/mc-monitor/releases/latest" | 
 
 FROM cgr.dev/chainguard/wolfi-base:latest AS runner
 
-RUN apk add libstdc++ libcurl-openssl4
+RUN apk add libstdc++ libcurl-openssl4 rsync
 
 COPY --from=builder /tmp/download/mc-monitor/mc-monitor /usr/local/bin/
 
