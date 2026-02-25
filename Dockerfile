@@ -38,9 +38,9 @@ RUN \
   ln -s /tmp/allowlist.json . && \
   ln -s /tmp/permissions.json . && \
   ln -s /tmp/config . && \
-  ln -s /srv/data/resource_packs . && \
-  ln -s /srv/data/behavior_packs . && \
-  ln -s /srv/data/valid_known_packs.json . && \
+  ln -s /tmp/resource_packs . && \
+  ln -s /tmp/behavior_packs . && \
+  ln -s /tmp/valid_known_packs.json . && \
   ln -s /srv/data/worlds .
 
 COPY server.properties.add bedrock_server.sh .
